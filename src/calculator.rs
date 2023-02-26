@@ -31,7 +31,7 @@ impl Calculator {
             match c {
                 '0'..='9' => match tokens.last_mut() {
                     Some(Token::Number(n)) => {
-                        *n = *n + 10 + (c as u32 - 48);
+                        *n = *n * 10 + (c as u32 - 48);
                     },
                     _ => {
                         let digit = c as u32 - 48;
