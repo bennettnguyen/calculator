@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 plotters = "0.3"
 meval = "0.2"
+open = "4.0"

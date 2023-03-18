@@ -1,33 +1,43 @@
 use std::fmt;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-pub enum Operator {
+pub enum Operator { //operator types
     Add,
     Sub,
     Mul,
-    Div
+    Div,
+    Exp
 }
-
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-pub enum Token {
+pub enum Token { //token types
     Number(u32),
     Op(Operator),
     Bracket(char)
 }
-
-pub struct Calculator {}
-
-#[derive(Debug)]
+#[derive(Debug)] //error types
 pub enum Error {
     BadeToken(char),
-    MismatchedParens
+    MismatchedParens,
+    Equation
 }
+
+pub struct Calculator {}
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::BadeToken(c) => write!(f, "Bad token: {}", c),
             Error::MismatchedParens => write!(f, "Mismatched parentheses"),
+            Error::Equation => write!(f, "Did you mean to graph?")
+        }
+    }
+}
+
+impl PartialEq for Error {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Error::Equation, Error::Equation) => true,
+            _ => false,
         }
     }
 }
@@ -69,8 +79,12 @@ impl Calculator {
                 '-' => tokens.push(Token::Op(Operator::Sub)),
                 '*' => tokens.push(Token::Op(Operator::Mul)),
                 '/' => tokens.push(Token::Op(Operator::Div)),
+                '^' => tokens.push(Token::Op(Operator::Exp)),
                 ' ' => {},
                 '\n' => {},
+                '=' => return Err(Error::Equation),
+                'f' => return Err(Error::Equation),
+                'y' => return Err(Error::Equation),
                 _ => return Err(Error::BadeToken(c))
             }
         }
@@ -136,6 +150,11 @@ impl Calculator {
                     let right = stack.pop().unwrap();
                     let left = stack.pop().unwrap();
                     stack.push(left / right);
+                },
+                Token::Op(Operator::Exp) => {
+                    let right = stack.pop().unwrap();
+                    let left = stack.pop().unwrap();
+                    stack.push(left.powf(right));
                 },
                 _ => {}
             }
