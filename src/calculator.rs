@@ -1,4 +1,6 @@
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+use std::fmt;
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub enum Operator {
     Add,
     Sub,
@@ -6,7 +8,7 @@ pub enum Operator {
     Div
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub enum Token {
     Number(u32),
     Op(Operator),
@@ -20,6 +22,17 @@ pub enum Error {
     BadeToken(char),
     MismatchedParens
 }
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Error::BadeToken(c) => write!(f, "Bad token: {}", c),
+            Error::MismatchedParens => write!(f, "Mismatched parentheses"),
+        }
+    }
+}
+
+impl std::error::Error for Error {}
 
 impl Calculator {
     pub fn parse<T: AsRef<str>>(expr: T) -> Result<Vec<Token>, Error> {
@@ -133,4 +146,5 @@ impl Calculator {
             stack.pop()
         }
     }
+   
 }
