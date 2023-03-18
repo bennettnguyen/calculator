@@ -17,7 +17,7 @@ pub enum Token { //token types
 }
 #[derive(Debug)] //error types
 pub enum Error {
-    BadeToken(char),
+    BadToken(char),
     MismatchedParens,
     Equation
 }
@@ -28,7 +28,7 @@ pub struct Calculator {}
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Error::BadeToken(c) => write!(f, "Bad token: {}", c),
+            Error::BadToken(c) => write!(f, "Bad token: {}", c),
             Error::MismatchedParens => write!(f, "Mismatched parentheses"),
             Error::Equation => write!(f, "Did you mean to graph?")
         }
@@ -78,7 +78,7 @@ impl Calculator {
                 '=' => return Err(Error::Equation),
                 'f' => return Err(Error::Equation),
                 'y' => return Err(Error::Equation),
-                _ => return Err(Error::BadeToken(c))
+                _ => return Err(Error::BadToken(c))
             }
         }
         if parens.len() > 0 {

@@ -26,7 +26,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         if let calculator::Error::Equation = err  {
                             prompt_and_graph()?;
                             continue;
-                        } else if let calculator::Error::BadeToken('x') = err {
+                        } else if let calculator::Error::BadToken('x') = err {
                             println!("Did you mean to graph?");
                             prompt_and_graph()?;
                             continue;
