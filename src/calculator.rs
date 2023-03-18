@@ -1,3 +1,4 @@
+//Tutorial based
 use std::fmt;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
@@ -23,21 +24,13 @@ pub enum Error {
 
 pub struct Calculator {}
 
+//displaying error messages
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::BadeToken(c) => write!(f, "Bad token: {}", c),
             Error::MismatchedParens => write!(f, "Mismatched parentheses"),
             Error::Equation => write!(f, "Did you mean to graph?")
-        }
-    }
-}
-
-impl PartialEq for Error {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Error::Equation, Error::Equation) => true,
-            _ => false,
         }
     }
 }
@@ -51,7 +44,7 @@ impl Calculator {
         let mut tokens: Vec<Token> = Vec::new();
         let mut parens = Vec::new();
         for c in chars {
-            match c {
+            match c { //pattern matching the characters
                 '0'..='9' => match tokens.last_mut() {
                     Some(Token::Number(n)) => {
                         *n = *n * 10 + (c as u32 - 48);
@@ -94,7 +87,8 @@ impl Calculator {
 
         Ok(tokens)
     }
-    pub fn expression(mut tokens: Vec<Token>) -> Vec<Token> {
+
+    pub fn expression(mut tokens: Vec<Token>) -> Vec<Token> { //Shunting Yard algorithm
         tokens.reverse();
 
         let mut queue: Vec<Token> = Vec::new();
@@ -124,7 +118,7 @@ impl Calculator {
         queue
     }
 
-    pub fn evaluate(mut tokens: Vec<Token>) -> Option<f32> {
+    pub fn evaluate(mut tokens: Vec<Token>) -> Option<f32> { //evaluate the expression
         tokens.reverse();
 
         let mut stack: Vec<f32> = Vec::new();

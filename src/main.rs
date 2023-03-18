@@ -1,5 +1,5 @@
 use calculator::Calculator;
-use plotters::prelude::*;
+use plotters::prelude::*; //plotters crate
 use std::io;
 use meval::eval_str;
 use open;
@@ -45,7 +45,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 }
 
-fn prompt_and_graph() -> Result<(), Box<dyn std::error::Error>> {
+fn prompt_and_graph() -> Result<(), Box<dyn std::error::Error>> { //helper function
     println!("Enter the expression to graph: (Simply type the equation without y, f(x), etc. e.g. x + 2)");
     let mut expression = String::new();
     io::stdin().read_line(&mut expression)?;
@@ -98,7 +98,7 @@ fn graph(equation: String, a: Option<f64>, b: Option<f64>) -> Result<(), Box<dyn
 
     chart.configure_mesh().draw()?;
 
-    let f = |x: f64| eval_str(&equation.replace("x", &x.to_string())).unwrap();
+    let f = |x: f64| eval_str(&equation.replace("x", &x.to_string())).unwrap(); //closure
 
     chart.draw_series(LineSeries::new(
         (0..=100)
